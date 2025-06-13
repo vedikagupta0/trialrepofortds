@@ -1,0 +1,25 @@
+name: Daily Commit Automation
+
+on:
+  schedule:
+    - cron: '23 2 * * *'  # Runs daily at 02:23 UTC
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Make Dummy Commit by 23f3003724@ds.study.iitm.ac.in
+        run: |
+          echo "Updated at $(date -u)" >> daily_log.txt
+          git config --global user.name "DevSync Automation Bot"
+          git config --global user.email "23f3003724@ds.study.iitm.ac.in"
+          git add daily_log.txt
+          git commit -m "Daily automated commit: $(date -u)"
+          git push
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
